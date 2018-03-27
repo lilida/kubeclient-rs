@@ -33,7 +33,7 @@ impl Kubernetes {
     /// let kube = Kubernetes::load_conf("admin.conf")?;
     /// ```
     pub fn load_conf<P: AsRef<Path>>(path: P) -> Result<Kubernetes> {
-        Ok(Kubernetes{
+        Ok(Kubernetes {
             low_level: KubeLowLevel::load_conf(path)?,
             namespace: None,
         })
@@ -51,7 +51,10 @@ impl Kubernetes {
     /// }
     /// ```
     pub fn config_maps(&self) -> KubeClient<ConfigMap> {
-        KubeClient { kube: self.clone(), _marker: PhantomData }
+        KubeClient {
+            kube: self.clone(),
+            _marker: PhantomData,
+        }
     }
 
     /// Get a kubernetes client for managing `Deployments`
@@ -66,7 +69,10 @@ impl Kubernetes {
     /// }
     /// ```
     pub fn deployments(&self) -> KubeClient<Deployment> {
-        KubeClient { kube: self.clone(), _marker: PhantomData }
+        KubeClient {
+            kube: self.clone(),
+            _marker: PhantomData,
+        }
     }
 
     /// Get a kubernetes client for managing `NetworkPolicies`
@@ -81,7 +87,10 @@ impl Kubernetes {
     /// }
     /// ```
     pub fn network_policies(&self) -> KubeClient<NetworkPolicy> {
-        KubeClient { kube: self.clone(), _marker: PhantomData }
+        KubeClient {
+            kube: self.clone(),
+            _marker: PhantomData,
+        }
     }
 
     /// Get a kubernetes client for managing `Nodes`
@@ -96,7 +105,10 @@ impl Kubernetes {
     /// }
     /// ```
     pub fn nodes(&self) -> KubeClient<Node> {
-        KubeClient { kube: self.clone(), _marker: PhantomData }
+        KubeClient {
+            kube: self.clone(),
+            _marker: PhantomData,
+        }
     }
 
     /// Get a kubernetes client for managing `Pods`
@@ -111,7 +123,10 @@ impl Kubernetes {
     /// }
     /// ```
     pub fn pods(&self) -> KubeClient<Pod> {
-        KubeClient { kube: self.clone(), _marker: PhantomData }
+        KubeClient {
+            kube: self.clone(),
+            _marker: PhantomData,
+        }
     }
 
     /// Get a kubernetes client for managing `Secrets`
@@ -126,7 +141,10 @@ impl Kubernetes {
     /// }
     /// ```
     pub fn secrets(&self) -> KubeClient<Secret> {
-        KubeClient { kube: self.clone(), _marker: PhantomData }
+        KubeClient {
+            kube: self.clone(),
+            _marker: PhantomData,
+        }
     }
 
     /// Get a kubernetes client for managing `Services`
@@ -141,7 +159,10 @@ impl Kubernetes {
     /// }
     /// ```
     pub fn services(&self) -> KubeClient<Service> {
-        KubeClient { kube: self.clone(), _marker: PhantomData }
+        KubeClient {
+            kube: self.clone(),
+            _marker: PhantomData,
+        }
     }
 
     /// Get a kubernetes client that uses a specific namespace
@@ -156,7 +177,10 @@ impl Kubernetes {
     ///     .get("clusterinfo")?;
     /// ```
     pub fn namespace(&self, namespace: &str) -> Kubernetes {
-        Kubernetes { low_level: self.low_level.clone(), namespace: Some(namespace.to_owned()) }
+        Kubernetes {
+            low_level: self.low_level.clone(),
+            namespace: Some(namespace.to_owned()),
+        }
     }
 
     /// Check to see if the Kubernetes API is healthy
@@ -189,7 +213,8 @@ impl Kubernetes {
     /// ```
     pub fn apply<P: AsRef<Path>>(&self, path: P) -> Result<()> {
         let _: Vec<Value> = self.low_level.each_resource_path(path, |path| {
-            self.low_level.apply_file(&path)
+            self.low_level
+                .apply_file(&path)
                 .chain_err(|| format!("Failed to apply {}", path.display()))
         })?;
 
@@ -213,7 +238,8 @@ impl Kubernetes {
     /// ```
     pub fn replace<P: AsRef<Path>>(&self, path: P) -> Result<()> {
         let _: Vec<Value> = self.low_level.each_resource_path(path, |path| {
-            self.low_level.replace_file(&path)
+            self.low_level
+                .replace_file(&path)
                 .chain_err(|| format!("Failed to replace {}", path.display()))
         })?;
 

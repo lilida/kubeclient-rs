@@ -61,6 +61,18 @@ impl KubeClient<Deployment> {
     }
 }
 
+
+impl KubeClient<Node> {
+    pub fn update_status(&self, node_name: &str, node: &Node) -> Result<Node> {
+        let resource = format!("{}/status", node_name);
+        let route = ResourceRoute::new(Node::api(), Node::kind().plural, &resource);
+    
+        let url = route.build(&self.kube.low_level.base_url)?;
+        let resp = self.kube.low_level.http_put_json(url,node)?;
+        Ok(resp)
+    }
+}
+
 pub trait ReadClient  {
     type R;
     /// Indicates whether or not the named resource exists in the Kubernetes cluster
